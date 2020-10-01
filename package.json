@@ -1,0 +1,28 @@
+{
+    "name": "linkbase",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "Sebastian Alsina <alsinas@me.com>",
+    "license": "MIT",
+    "proxy": "http://localhost:5000",
+    "private": true,
+    "scripts": {
+        "dev": "next",
+        "dev start": "next start",
+        "dev build": "next build"
+    },
+    "dependencies": {
+        "@stripe/stripe-js": "^1.9.0",
+        "autoprefixer": "^10.0.1",
+        "axios": "^0.20.0",
+        "mysql": "^2.18.1",
+        "next": "^9.5.3",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
+        "sass": "^1.26.11",
+        "tailwindcss": "^1.8.10"
+    },
+    "devDependencies": {
+        "postcss-preset-env": "^6.7.0"
+    }
+}
