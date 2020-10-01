@@ -4,8 +4,6 @@
     "main": "index.js",
     "author": "Sebastian Alsina <alsinas@me.com>",
     "license": "MIT",
-    "proxy": "http://localhost:5000",
-    "private": true,
     "scripts": {
         "dev": "next",
         "dev start": "next start",

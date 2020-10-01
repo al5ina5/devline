@@ -6,21 +6,28 @@ const stripePromise = loadStripe(
     'pk_test_51Gy5KMFHQBpXr1Doobx42sY4zGeSTOBBxoY0KCNKLR5xHuBFnJJu054AY9gGQhiqU7QCR0HQHCg32KKbMBaoKaBv00YpO1BaiK'
 )
 
-export default function Checkout() {
+export default function Checkout(props) {
     var router = useRouter()
+
+    var { data } = props
 
     const checkoutWithStripe = async (e) => {
         e.preventDefault()
-        var post = await Axios.post('http://localhost:5000/api/pay', {
-            job_id: router.query.uid
-        })
-        console.log(post)
+        try {
+            var post = await Axios.post('http://localhost:5000/api/pay', {
+                job_id: router.query.uid
+            })
+        } catch (e) {
+            console.log(e)
+            return
+        }
 
-        const { sessionId } = post.data
+        const { id } = post.data
+        console.log(post.data)
 
         const stripe = await stripePromise
         const { error } = await stripe.redirectToCheckout({
-            sessionId
+            sessionId: id
         })
     }
 
@@ -38,25 +45,16 @@ export default function Checkout() {
                             </p>
                         </div>
                         <div className='note border border-yellow-300 bg-yellow-100 p-8 rounded-md'>
-                            <p>Johnny Appleseed</p>
+                            <p>{data.createdAt}</p>
                             <p>you@yourname.com</p>
                             <p>ID: {router.query.uid}</p>
                             <br />
-                            <p className='font-bold'>
-                                Aute cillum labore sit anim.
-                            </p>
-                            <p>
-                                Aute enim in laborum excepteur ex Lorem velit
-                                commodo. Esse cillum laboris excepteur velit
-                                fugiat minim. Magna occaecat nulla nostrud et
-                                fugiat id proident labore nisi magna. Duis nisi
-                                ut ea veniam exercitation sunt aliquip. Do ad
-                                sit incididunt ipsum ad cillum proident proident
-                                occaecat aliquip ipsum.
-                            </p>
+                            <p className='font-bold'>{data.title}</p>
+                            <p>{data.description}</p>
                             <br />
                             <p>
-                                <b>Skills Needed: </b>react, ubuntu, servers
+                                <b>Skills Needed: </b>
+                                {data.skillset.join(', ')}
                             </p>
                         </div>
                         <form className='space-y-2'>
@@ -77,4 +75,23 @@ export default function Checkout() {
             </div>
         </>
     )
+}
+
+export async function getServerSideProps(ctx) {
+    console.log(ctx)
+
+    try {
+        var get = await Axios.get(
+            'http://localhost:5000/api/jobs/get/5f757ee7842d473dfe161cec'
+        )
+    } catch (e) {
+        console.log(e)
+    }
+
+    var data = get.data
+    return {
+        props: {
+            data
+        }
+    }
 }
